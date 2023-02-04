@@ -29,6 +29,11 @@ QPointF MyPointItem::toRectPos(QPointF center)
     return center - QPointF(m_R, m_R);
 }
 
+QPointF MyPointItem::center()
+{
+    return sceneBoundingRect().center();
+}
+
 void MyPointItem::setRadius(qreal r)
 {
     setRect(rect().x(), rect().y(), 2 * r, 2 * r);
@@ -84,4 +89,38 @@ void SelectRectItem::m_updateArea()
     QPointF bias = m_endPos - m_beginPos;
     m_selectArea.setRect(x, y, qAbs(bias.x()), qAbs(bias.y()));
     setRect(m_selectArea);
+}
+
+ControlPolygonItem::ControlPolygonItem(QPointF beginPos)
+{
+    m_path.moveTo(beginPos);
+    setPen(QPen(Qt::darkGray));
+}
+
+ControlPolygonItem::ControlPolygonItem()
+{
+    m_path.moveTo(QPointF(0,0));
+    setPen(QPen(Qt::darkGray));
+}
+
+void ControlPolygonItem::lineTo(QPointF pos)
+{
+    m_path.lineTo(pos);
+    setPath(m_path);
+}
+
+void ControlPolygonItem::draw(QList<MyPointItem *> &ctrPoints)
+{
+    if(ctrPoints.size() < 2)
+    {
+        return;
+    }
+    m_path.clear();
+//    qDebug()<<"DRAW";
+    m_path.moveTo(ctrPoints[0]->center());
+    for(auto i = 1; i < ctrPoints.size(); i++)
+    {
+        m_path.lineTo(ctrPoints[i]->center());
+    }
+    setPath(m_path);
 }

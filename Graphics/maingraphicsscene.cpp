@@ -9,7 +9,14 @@
 MainGraphicsScene::MainGraphicsScene(QWidget *parent)
     : QGraphicsScene{parent}
 {
+    ctrPolygon = new ControlPolygonItem();
+    addItem(ctrPolygon);
 
+    timer = new QTimer();
+    timer->setInterval(30);
+    connect(timer, &QTimer::timeout, this,
+            &MainGraphicsScene::drawControlPolgon);
+    timer->start();
 }
 
 MyPointItem *MainGraphicsScene::addPoint(QPointF pos)
@@ -21,7 +28,7 @@ MyPointItem *MainGraphicsScene::addPoint(QPointF pos)
                        QGraphicsItem::ItemIsSelectable |
                        QGraphicsItem::ItemIsMovable);
     addItem(newPoint);
-
+    ctrPoints.append(newPoint);
     return newPoint;
 }
 
@@ -39,6 +46,10 @@ QPointF MainGraphicsScene::pointRectPos(QPointF center)
     return center - QPointF(m_R, m_R);
 }
 
+void MainGraphicsScene::drawControlPolgon()
+{
+    ctrPolygon->draw(ctrPoints);
+}
 
 void MainGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -64,7 +75,7 @@ void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         clearSelection();
     }
 
-    if(item!=NULL)
+    if(item!=NULL && item->type() == 65537)
     {
         //点击选择点
         item->setSelected(true);
@@ -76,7 +87,7 @@ void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         //添加点
         auto newPoint = addPoint(pressScenePos - QPointF(m_R, m_R));
-        newPoint->setSelected(true);  
+        newPoint->setSelected(true);
     }
     else
     {

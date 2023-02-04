@@ -31,6 +31,7 @@ CurveWindow::CurveWindow(QWidget *parent)
     scene = new MainGraphicsScene();
     scene->setSceneRect(-viewR.width()/2, -viewR.height()/2,
                         viewR.width()-2, viewR.height()-2);
+
     ui->mainView->setScene(scene);
 
     connect(scene, &MainGraphicsScene::mouseMove,
@@ -82,7 +83,9 @@ void CurveWindow::on_btnChangePoint_clicked()
 
 void CurveWindow::on_btnDefineEdit_clicked()
 {
-    if(scene->selectedItems().count() == 1)
+    if(scene->selectedItems().count()==1 &&
+            !ui->editPosX->text().isEmpty() &&
+            !ui->editPosY->text().isEmpty())
     {
         QGraphicsItem* item = scene->selectedItems()[0];
         qreal center_x = ui->editPosX->text().toDouble();
@@ -97,5 +100,6 @@ void CurveWindow::on_btnDefineEdit_clicked()
                           item->sceneBoundingRect().y());
         item->setPos(item->pos() + moveDistance);
     }
+    qDebug()<<ui->mainView->items();
 }
 

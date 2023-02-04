@@ -19,13 +19,13 @@ public:
     explicit MyPointItem(qreal x, qreal y, qreal d);
     QPointF toRectCenter(QPointF boundingRectPos);
     QPointF toRectPos(QPointF center);
+    QPointF center();
+
     void setRadius(qreal r);
 
     int type() const override;
 private:
     qreal m_R;
-signals:
-
 };
 
 class SelectRectItem : public QGraphicsRectItem
@@ -45,5 +45,18 @@ private:
 
     void m_updateArea();
 };
+
+class ControlPolygonItem : public QGraphicsPathItem
+{
+public:
+    explicit ControlPolygonItem(QPointF beginPos);
+    explicit ControlPolygonItem();
+    void lineTo(QPointF pos);
+    void draw(QList<MyPointItem*>& ctrPoints);
+
+private:
+    QPainterPath m_path;
+};
+
 
 #endif // MYPOINT_H

@@ -9,7 +9,9 @@ MainGraphicsView::MainGraphicsView(QWidget *parent)
 //    painter.setPen(Qt::blue);
 //    painter.drawLine(QPoint(0,0),
 //                     QPoint(500, 500));
+//    this->setAttribute(Qt::WA_StyledBackground, true);
 }
+
 
 
 
