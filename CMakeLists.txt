@@ -13,15 +13,20 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Graphics)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/NURBS)
 
 set(PROJECT_SOURCES
         main.cpp
-        curvewindow.cpp
-        curvewindow.h
+        curvewindow.cpp curvewindow.h
+        curvewindow.ui
+
         Graphics/maingraphicsview.h Graphics/maingraphicsview.cpp
         Graphics/maingraphicsscene.h Graphics/maingraphicsscene.cpp
         Graphics/myitems.h Graphics/myitems.cpp
-        curvewindow.ui
+        Graphics/basisfunwidget.h Graphics/basisfunwidget.cpp
+
+        NURBS/basisfunction.h NURBS/basisfunction.cpp
+        NURBS/bspline.h NURBS/bspline.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

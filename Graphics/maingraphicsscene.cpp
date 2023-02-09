@@ -124,6 +124,8 @@ void MainGraphicsScene::keyPressEvent(QKeyEvent *event)
         for(auto item : selectedItems())
         {
             removeItem(item);
+            ctrPoints.removeOne(item);
+            delete item;
         }
     }
 }

@@ -38,6 +38,7 @@ CurveWindow::CurveWindow(QWidget *parent)
             this, &CurveWindow::on_mouseMove);
     connect(scene, &MainGraphicsScene::selectItemScenePos,
             this, &CurveWindow::on_selectItem);
+//    ui->basisFunWidget->update();
 }
 
 CurveWindow::~CurveWindow()
