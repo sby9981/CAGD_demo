@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
                          QPointF(500,200), QPointF(500,400),
                          QPointF(700,400), QPointF(700,200)};
     QPointF pp = evaluateDeBoorCoeff(0.5, plist, knots, 4, 3);
+    
     qDebug() << pp;
 
 //    QApplication a(argc, argv);

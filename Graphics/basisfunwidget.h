@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QList>
 #include <QPainter>
-#include "NURBS/basisfunction.h"
+#include "basis.h"
 
 class BasisFunWidget : public QWidget
 {

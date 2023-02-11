@@ -13,12 +13,12 @@ BasisFunWidget::BasisFunWidget(QWidget *parent)
     {
         m_interp.push_back(u);
     }
-    basisFun.setType(uniform);
+    basisFun.knots.setQuasiUniform();
 }
 
 void BasisFunWidget::paintEvent(QPaintEvent *event)
 {
-    //绘制
+//    绘制
 //    static const QPoint points[4] = {
 //        QPoint(10, 80),
 //        QPoint(20, 10),
@@ -35,14 +35,6 @@ void BasisFunWidget::paintEvent(QPaintEvent *event)
 
     painter.setPen(m_curvePen);
     drawBasisFunCurve(&painter);
-//    QPainterPath path;
-//    path.moveTo(20, 80);
-//    path.lineTo(20, 30);
-//    path.cubicTo(QPoint(80, 0), QPoint(50, 50), QPoint(80, 80));
-
-//    painter.drawLine(QPoint(0,150), QPoint(500,150));
-//    painter.setPen(m_curvePen);
-//    painter.drawLine(QPoint(100,0), QPoint(100,200));
 }
 
 void BasisFunWidget::drawAxis(QPainter *painter)
@@ -69,7 +61,7 @@ void BasisFunWidget::drawBasisFunCurve(QPainter *painter)
         {
             double x = zero_x + m_interp[j] * axis_length_x;
             double y = zero_y - curves[i][j] * axis_length_y;
-            if(curves[i][j] > 0.01)
+            if(curves[i][j] > 0.001)
             {
                 //忽略函数值为0的部分
                 if(moved)

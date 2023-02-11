@@ -25,7 +25,7 @@ set(PROJECT_SOURCES
         Graphics/myitems.h Graphics/myitems.cpp
         Graphics/basisfunwidget.h Graphics/basisfunwidget.cpp
 
-        NURBS/basisfunction.h NURBS/basisfunction.cpp
+        NURBS/basis.h NURBS/basis.cpp
         NURBS/bspline.h NURBS/bspline.cpp
 )
 
