@@ -47,8 +47,15 @@
         <string>控制点</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="editPosY">
+        <item row="4" column="0" colspan="2">
+         <widget class="QPushButton" name="btnDefineEdit">
+          <property name="text">
+           <string>确定</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="editPosX">
           <property name="maximumSize">
            <size>
             <width>100</width>
@@ -57,27 +64,8 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>重复度:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="editPosX">
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="editPosY">
           <property name="maximumSize">
            <size>
             <width>100</width>
@@ -121,23 +109,6 @@
           </property>
           <property name="text">
            <string>x:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="editRepeatDegree">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QPushButton" name="btnDefineEdit">
-          <property name="text">
-           <string>确定</string>
           </property>
          </widget>
         </item>
@@ -188,18 +159,11 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="editDegree">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="1">
          <widget class="QComboBox" name="cboCurveType"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spbDegree"/>
         </item>
        </layout>
       </widget>

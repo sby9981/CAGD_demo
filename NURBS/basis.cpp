@@ -1,7 +1,7 @@
 #include "basis.h"
-#include <QDebug>
 #include <numeric>
 #include <queue>
+#include <cmath>
 
 KnotsVector::KnotsVector()
 {}
@@ -35,7 +35,7 @@ double *KnotsVector::data()
 
 void KnotsVector::setUnifrom()
 {
-    m_type = uniform;
+    m_type = Uniform;
     double interval = 1.0 / (m_degree + m_ctrPointsNum);
     double val = 0;
     for(int i=0; i < m_knots.size(); i++)
@@ -47,7 +47,7 @@ void KnotsVector::setUnifrom()
 
 void KnotsVector::setQuasiUniform()
 {
-    m_type = quasi_uniform;
+    m_type = Quasi_uniform;
     double interval = 1.0 / ( -m_degree + m_ctrPointsNum);
     double val = interval;
 
@@ -65,7 +65,7 @@ void KnotsVector::setRiesenfeld(vector<double>& polylength)
     {
         return;
     }
-
+    m_type = Riesenfeld;
     //分母 L
     double totalLength = std::accumulate(
                 polylength.begin(), polylength.end(), 0.0);
@@ -113,6 +113,7 @@ void KnotsVector::setHartley_Judd(vector<double> &polylength)
     {
         return;
     }
+    m_type = Hartley_Judd;
     //分母 L
     double denominator {0};
     for(int i = m_degree+1; i < m_ctrPointsNum; i++)
@@ -136,6 +137,36 @@ void KnotsVector::setHartley_Judd(vector<double> &polylength)
     }
 }
 
+int KnotsVector::degree() const
+{
+    return m_degree;
+}
+
+int KnotsVector::ctrPointsNum() const
+{
+    return m_ctrPointsNum;
+}
+
+void KnotsVector::setDegree(int newDegree)
+{
+    m_degree = newDegree;
+    m_knots.resize(m_degree + m_ctrPointsNum + 1);
+}
+
+void KnotsVector::setCtrPointsNum(int newCtrPointsNum)
+{
+    m_ctrPointsNum = newCtrPointsNum;
+    m_knots.resize(m_degree + m_ctrPointsNum + 1);
+}
+
+void KnotsVector::operator=(const KnotsVector &other)
+{
+    m_degree = other.m_degree;
+    m_ctrPointsNum = other.m_ctrPointsNum;
+    m_type = other.m_type;
+    m_knots = other.m_knots;
+}
+
 KnotsType KnotsVector::type() const
 {
     return m_type;
@@ -148,6 +179,7 @@ vector<double> &KnotsVector::vec()
 
 int KnotsVector::getParamRangeId(double u)
 {
+    //获取u所在的节点区间
     for(int i=0; i<m_knots.size(); i++)
     {
         if(u < m_knots[i])
@@ -155,7 +187,7 @@ int KnotsVector::getParamRangeId(double u)
             return i-1;
         }
     }
-    return m_knots.size();
+    return m_knots.size()-2;
 }
 
 bool KnotsVector::isInDomain(double u)
@@ -165,6 +197,11 @@ bool KnotsVector::isInDomain(double u)
         return false;
     }
     return true;
+}
+
+void KnotsVector::setNotDefine()
+{
+    m_type = NotDefine;
 }
 
 void KnotsVector::m_setEdgeRepeatKnot()
@@ -189,6 +226,12 @@ void BasisFunction::reset(int degree, int controlPointsNum)
     knots.reset(degree, controlPointsNum);
 }
 
+void BasisFunction::reset(KnotsVector &otherKnots)
+{
+    knots = otherKnots;
+    m_degree = otherKnots.degree();
+    m_ctrPointsNum = otherKnots.ctrPointsNum();
+}
 
 vector<vector<double>> BasisFunction::evaluate(double interval)
 {
@@ -220,6 +263,15 @@ vector<vector<double> > BasisFunction::evaluate(vector<double> *interp)
         }
     }
     return output;
+}
+
+bool BasisFunction::isDrawEnable()
+{
+    if(knots.vec().size()>2)
+    {
+        return true;
+    }
+    return false;
 }
 
 
@@ -389,5 +441,17 @@ QPointF evaluateDeBoorCoeff(
         coeff.pop();
     }
     return d;
+}
+
+vector<double> getPolyLength(QList<QPointF> points_list)
+{
+    vector<double> polylength;
+    for(int i=0; i<points_list.size()-1;i++)
+    {
+        QPointF temp = points_list[i] - points_list[i+1];
+        double dist = sqrt(temp.x()*temp.x() + temp.y()*temp.y());
+        polylength.push_back(dist);
+    }
+    return polylength;
 }
 #endif

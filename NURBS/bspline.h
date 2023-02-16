@@ -8,14 +8,15 @@ class BSpline
 public:
     KnotsVector knots;
 
-
-    BSpline() {};
-    BSpline(int degree, int controlPointsNum);
+    explicit BSpline() {};
+    explicit BSpline(int degree, int controlPointsNum);
 
     void reset(int degree, int controlPointsNum);
+    bool isDrawEnable();
+    static bool isDrawEnable(int degree, int controlPointsNum, KnotsType type);
 
     template<typename T_point>
-    vector<T_point> evaluate(vector<T_point> &ctrpoints, double interval)
+    vector<T_point> evaluate(vector<T_point> &ctrpoints, double interval=0.01)
     {
         vector<T_point> curve;
         for(double u = 0; u < 1.0; u += interval)
@@ -34,12 +35,15 @@ public:
     }
 
 #if USE_QTPOINT
-    QList<QPointF> evaluate(QList<QPointF> &ctrpoints, double interval);
+    QList<QPointF> evaluate(QList<QPointF> &ctrpoints, double interval=0.01);
 #endif
 
+    void setDegree(int newDegree);
+    void setCtrPointsNum(int newCtrPointsNum);
+
 private:
-    int m_degree;
-    int m_ctrPointsNum;
+    int m_degree {0};
+    int m_ctrPointsNum {0};
 };
 
 #endif // BSPLINE_H

@@ -111,11 +111,12 @@ void ControlPolygonItem::lineTo(QPointF pos)
 
 void ControlPolygonItem::draw(QList<MyPointItem *> &ctrPoints)
 {
+    m_path.clear();
     if(ctrPoints.size() < 2)
     {
+        setPath(m_path);
         return;
-    }
-    m_path.clear();
+    }  
 //    qDebug()<<"DRAW";
     m_path.moveTo(ctrPoints[0]->center());
     for(auto i = 1; i < ctrPoints.size(); i++)
@@ -123,4 +124,43 @@ void ControlPolygonItem::draw(QList<MyPointItem *> &ctrPoints)
         m_path.lineTo(ctrPoints[i]->center());
     }
     setPath(m_path);
+}
+
+BsplineCurveItem::BsplineCurveItem(QGraphicsItem *parent)
+    : QGraphicsPathItem(parent)
+{
+    QPen pen{QBrush(Qt::darkBlue), 2};
+    setPen(pen);
+}
+
+bool BsplineCurveItem::draw(QList<QPointF>& ctrPoints)
+{
+    //绘制样条曲线
+    if(!bspline.isDrawEnable())
+    {
+        return false;
+    }
+    else
+    {
+        QList<QPointF> points = bspline.evaluate(ctrPoints, 0.01);
+        m_path.clear();
+        m_path.moveTo(points[0]);
+        for(int i=1; i<points.size(); i++)
+        {
+            m_path.lineTo(points[i]);
+        }
+        setPath(m_path);
+        return true;
+    }
+}
+
+
+void BsplineCurveItem::setDegree(int newDegree)
+{
+    bspline.setDegree(newDegree);
+}
+
+void BsplineCurveItem::setCtrPointsNum(int newCtrPointsNum)
+{
+    bspline.setCtrPointsNum(newCtrPointsNum);
 }

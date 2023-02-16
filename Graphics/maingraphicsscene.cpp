@@ -12,10 +12,16 @@ MainGraphicsScene::MainGraphicsScene(QWidget *parent)
     ctrPolygon = new ControlPolygonItem();
     addItem(ctrPolygon);
 
+    bsplineCurve = new BsplineCurveItem();
+
+    addItem(bsplineCurve);
+
     timer = new QTimer();
     timer->setInterval(30);
     connect(timer, &QTimer::timeout, this,
             &MainGraphicsScene::drawControlPolgon);
+    connect(timer, &QTimer::timeout, this,
+            &MainGraphicsScene::drawBsplineCurve);
     timer->start();
 }
 
@@ -29,7 +35,22 @@ MyPointItem *MainGraphicsScene::addPoint(QPointF pos)
                        QGraphicsItem::ItemIsMovable);
     addItem(newPoint);
     ctrPoints.append(newPoint);
+    bsplineCurve->setCtrPointsNum(ctrPoints.size());
+
     return newPoint;
+}
+
+void MainGraphicsScene::removeAllPoint()
+{
+    for(auto item : items())
+    {
+        if(item->type() == 65537)
+        {
+            removeItem(item);
+            ctrPoints.removeOne(item);
+            delete item;
+        }
+    }
 }
 
 QPointF MainGraphicsScene::pointRectCenter(QPointF boundingRectPos)
@@ -51,7 +72,57 @@ void MainGraphicsScene::drawControlPolgon()
     ctrPolygon->draw(ctrPoints);
 }
 
+void MainGraphicsScene::drawBsplineCurve()
+{
+    if(!bsplineCurve->bspline.isDrawEnable(
+                bsplineDegree, ctrPoints.size(), bsplineType))
+    {
+        return;
+    }
+
+    QList<QPointF> points_list = generatePoints();
+    vector<double> polylength;
+    switch (bsplineType)
+    {
+    case Uniform:
+        bsplineCurve->bspline.knots.setUnifrom();
+        break;
+    case Quasi_uniform:
+        bsplineCurve->bspline.knots.setQuasiUniform();
+        break;
+    case Riesenfeld:
+        polylength = getPolyLength(points_list);
+        bsplineCurve->bspline.knots.setRiesenfeld(polylength);
+        break;
+    case Hartley_Judd:
+        polylength = getPolyLength(points_list);
+        bsplineCurve->bspline.knots.setHartley_Judd(polylength);
+        break;
+    default:
+        return;
+    }
+    //将knots传递给basisfun窗口
+    emit defineKnotsVec(bsplineCurve->bspline.knots);
+    bsplineCurve->draw(points_list);
+}
+
+
+QList<QPointF> MainGraphicsScene::generatePoints()
+{
+    QList<QPointF> points_list;
+    for (auto p : ctrPoints)
+    {
+        points_list.append(QPointF(p->center()));
+    }
+    return points_list;
+}
+
 void MainGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+/*
+    鼠标移动，需要考虑：
+    实时将鼠标位置传给主窗口显示
+    绘制变化中的选择框
+*/
 {
     QPointF mouseScenePos = event->scenePos();
     if(m_selectAreaEnable)
@@ -64,6 +135,10 @@ void MainGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+/*
+    鼠标点击，需要考虑：
+    添加点、选择点、框选的起始位置
+*/
 {
     QPointF pressScenePos = event->scenePos();
 
@@ -101,6 +176,10 @@ void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void MainGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+/*
+    鼠标松开，需要考虑：
+    框选结束，将选择框中的item设为选中，删除选择框
+*/
 {
     if (!addPointEnable && m_selectAreaEnable)
     {
@@ -127,6 +206,7 @@ void MainGraphicsScene::keyPressEvent(QKeyEvent *event)
             ctrPoints.removeOne(item);
             delete item;
         }
+        bsplineCurve->setCtrPointsNum(ctrPoints.size());
     }
 }
 

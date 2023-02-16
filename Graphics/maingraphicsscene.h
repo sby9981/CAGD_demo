@@ -13,19 +13,26 @@ class MainGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-
-    bool addPointEnable {true};
-    QList<MyPointItem*> ctrPoints;
-    QGraphicsPathItem* controlPolygon {NULL};
-
     explicit MainGraphicsScene(QWidget *parent = nullptr);
+
     MyPointItem* addPoint(QPointF pos);
+    void removeAllPoint();
 
     //控制点中心坐标与boundboxPos的转换
     QPointF pointRectCenter(QPointF boundingRectPos);
     QPointF pointRectPos(QPointF center);
+    QList<QPointF> generatePoints();
 
     void drawControlPolgon();
+    void drawBsplineCurve();
+
+public:
+    bool addPointEnable {true};
+    int bsplineDegree {0};
+    KnotsType bsplineType {NotDefine};
+    QList<MyPointItem*> ctrPoints;
+    ControlPolygonItem* ctrPolygon;
+    BsplineCurveItem* bsplineCurve;
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -35,6 +42,7 @@ protected:
 signals:
     void mouseMove(QPointF event);
     void selectItemScenePos(QPointF pos);
+    void defineKnotsVec(KnotsVector& knots);
 
 private:
     //用于框选
@@ -42,8 +50,6 @@ private:
     bool m_selectAreaEnable {false};
 
     QTimer* timer;
-
-    ControlPolygonItem* ctrPolygon {NULL};
 
     qreal m_R{5};    //点半径
 

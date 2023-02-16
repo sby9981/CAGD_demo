@@ -16,9 +16,11 @@ using std::vector;
 
 enum KnotsType
 {
-    null,
-    uniform,
-    quasi_uniform,
+    NotDefine,
+    Uniform,
+    Quasi_uniform,
+    Riesenfeld,
+    Hartley_Judd
 };
 
 struct point3
@@ -49,12 +51,18 @@ struct point3
 
 };
 
+
+
 class KnotsVector
 {
 public:
     KnotsVector();
     KnotsVector(int degree, int controlPointsNum);
+
     void reset(int degree, int controlPointsNum);
+    void setDegree(int newDegree);
+    void setCtrPointsNum(int newCtrPointsNum);
+    void operator=(const KnotsVector& other);
 
     double at(int i) const;
     double* data();
@@ -65,15 +73,22 @@ public:
     int getParamRangeId(double u);  //判断u所在的区间序号
     bool isInDomain(double u);      //判断u是否在定义域内
 
+    //设置类型
+    void setNotDefine();
     void setUnifrom();
     void setQuasiUniform();
     void setRiesenfeld(vector<double>& polylength);
     void setHartley_Judd(vector<double>& polylength);
 
+
+    int degree() const;
+
+    int ctrPointsNum() const;
+
 private:
     int m_degree {0};
     int m_ctrPointsNum {0};
-    KnotsType m_type {null};
+    KnotsType m_type {NotDefine};
     vector<double> m_knots;
 
     //设置首尾节点重复度为 degree+1
@@ -85,22 +100,26 @@ class BasisFunction
 
 public:
     KnotsVector knots;
-
+public:
+    BasisFunction(){};
     BasisFunction(int degree, int controlPointsNum);
     void reset(int degree, int controlPointsNum);
-    void setType(KnotsType newType);
+    void reset(KnotsVector& otherKnots);
     vector<vector<double>> evaluate(double interval=0.01);
     vector<vector<double>> evaluate(vector<double>* interp);
+    bool isDrawEnable();
 private:
-    int m_degree;
-    int m_ctrPointsNum;
+    int m_degree {0};
+    int m_ctrPointsNum {0};
 };
 
 double getBasisFunVal(double u, double* knots, int i, int k);
 
+
 #if USE_QTPOINT
 QPointF evaluateDeBoorCoeff(
         double u, QList<QPointF> &ctrPoints, double* knots, int i, int k);
+vector<double> getPolyLength(QList<QPointF> points_list);
 #endif
 
 template<typename T>

@@ -5,6 +5,7 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsItem>
 #include <QPainter>
+#include "bspline.h"
 
 class MyPointItem;
 class ControlPolygonItem;
@@ -54,6 +55,21 @@ public:
     void lineTo(QPointF pos);
     void draw(QList<MyPointItem*>& ctrPoints);
 
+private:
+    QPainterPath m_path;
+};
+
+class BsplineCurveItem : public QGraphicsPathItem
+{
+public:
+    explicit BsplineCurveItem(QGraphicsItem *parent = nullptr);
+    bool draw(QList<QPointF>& ctrPoints);
+
+    void setDegree(int newDegree);
+    void setCtrPointsNum(int newCtrPointsNum);
+
+public:
+    BSpline bspline;
 private:
     QPainterPath m_path;
 };

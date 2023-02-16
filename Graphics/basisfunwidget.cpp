@@ -9,23 +9,14 @@ BasisFunWidget::BasisFunWidget(QWidget *parent)
 {
     this->setAttribute(Qt::WA_StyledBackground, true);
 
-    for(double u = 0; u < 1.0; u += interval)
+    for(double u = 0.; u < 1.0; u += interval)
     {
         m_interp.push_back(u);
     }
-    basisFun.knots.setQuasiUniform();
 }
 
 void BasisFunWidget::paintEvent(QPaintEvent *event)
 {
-//    绘制
-//    static const QPoint points[4] = {
-//        QPoint(10, 80),
-//        QPoint(20, 10),
-//        QPoint(80, 30),
-//        QPoint(90, 70)
-//    };
-//    QRect rect{10, 20, 80, 60};
     //创建画家对象
     //参数为绘图设备, this表示在当前窗口绘制
     QPainter painter(this);
@@ -33,8 +24,34 @@ void BasisFunWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     drawAxis(&painter);
 
-    painter.setPen(m_curvePen);
-    drawBasisFunCurve(&painter);
+    if(basisFun.isDrawEnable())
+    {
+        painter.setPen(m_curvePen);
+        drawBasisFunCurve(&painter);
+
+        painter.setPen(m_knotPen);
+        drawKnots(&painter);
+    }
+}
+
+void BasisFunWidget::on_defineKnotsVec(KnotsVector &knots)
+{
+    basisFun.reset(knots);
+}
+
+void BasisFunWidget::on_timeout()
+{
+    update();
+}
+
+double BasisFunWidget::transformX(double x)
+{
+    return zero_x + x * axis_length_x;
+}
+
+double BasisFunWidget::transformY(double y)
+{
+    return zero_y - y * axis_length_y;
 }
 
 void BasisFunWidget::drawAxis(QPainter *painter)
@@ -59,9 +76,9 @@ void BasisFunWidget::drawBasisFunCurve(QPainter *painter)
         bool moved {false};     //控制path移动到初始点 再开始连线
         for(int j = 0; j< curves[i].size(); j++)
         {
-            double x = zero_x + m_interp[j] * axis_length_x;
-            double y = zero_y - curves[i][j] * axis_length_y;
-            if(curves[i][j] > 0.001)
+            double x = transformX(m_interp[j]);
+            double y = transformY(curves[i][j]);
+            if(curves[i][j] > MIN_POSITIVE_NUM)
             {
                 //忽略函数值为0的部分
                 if(moved)
@@ -76,5 +93,18 @@ void BasisFunWidget::drawBasisFunCurve(QPainter *painter)
             }
         }
         painter->drawPath(path);
+    }
+}
+
+void BasisFunWidget::drawKnots(QPainter *painter)
+{
+    double half_height {10.0};
+    for(auto knot : basisFun.knots.vec())
+    {
+        double x {transformX(knot)};
+        painter->drawLine(QPointF(x, zero_y-half_height),
+                          QPointF(x, zero_y+half_height));
+        painter->drawText(x, zero_y + 2*half_height,
+                          QString::number(knot));
     }
 }
