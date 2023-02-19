@@ -177,7 +177,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="MainGraphicsView" name="mainView">
+   <widget class="QGraphicsView" name="mainView">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -236,6 +236,19 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>670</y>
+      <width>211</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>曲面绘制</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -250,11 +263,6 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>MainGraphicsView</class>
-   <extends>QGraphicsView</extends>
-   <header location="global">maingraphicsview.h</header>
-  </customwidget>
   <customwidget>
    <class>BasisFunWidget</class>
    <extends>QWidget</extends>

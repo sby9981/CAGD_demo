@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <QPainter>
 #include <QString>
-
+#include "surfacewindow.h"
+#include <QtDataVisualization>
 CurveWindow::CurveWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CurveWindow)
@@ -37,17 +38,17 @@ CurveWindow::CurveWindow(QWidget *parent)
 
     //将scene左上角与view窗口左上角重合，且大小一致
     QRectF viewR = ui->mainView->geometry();
-    scene = new MainGraphicsScene();
+    scene = new MainCurveScene();
     scene->setSceneRect(-viewR.width()/2, -viewR.height()/2,
                         viewR.width()-2, viewR.height()-2);
 
 
     ui->mainView->setScene(scene);
 
-    connect(scene, &MainGraphicsScene::mouseMove, this, &CurveWindow::on_mouseMove);
-    connect(scene, &MainGraphicsScene::selectItemScenePos, this, &CurveWindow::on_selectItem);
+    connect(scene, &MainCurveScene::mouseMove, this, &CurveWindow::on_mouseMove);
+    connect(scene, &MainCurveScene::selectItemScenePos, this, &CurveWindow::on_selectItem);
 
-    connect(scene, &MainGraphicsScene::defineKnotsVec,
+    connect(scene, &MainCurveScene::defineKnotsVec,
             ui->basisFunWidget, &BasisFunWidget::on_defineKnotsVec);
 
 
@@ -141,5 +142,12 @@ void CurveWindow::on_spbDegree_valueChanged(int arg1)
 void CurveWindow::on_cboCurveType_activated(int index)
 {
     scene->bsplineType = static_cast<KnotsType>(index);
+}
+
+
+void CurveWindow::on_pushButton_clicked()
+{
+    SurfaceWindow *surfW = new SurfaceWindow();
+    surfW->show();
 }
 

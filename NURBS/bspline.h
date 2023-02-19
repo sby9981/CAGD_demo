@@ -46,4 +46,52 @@ private:
     int m_ctrPointsNum {0};
 };
 
+
+class BsplineSurface
+{
+public:
+    BSpline uSpline;
+    BSpline vSpline;
+public:
+    BsplineSurface();
+
+    void reset(int uDegree, int vDegree, int uCtrPointsNum, int vCtrPointsNum);
+
+
+
+private:
+    int m_uDegree {0};
+    int m_vDegree {0};
+    int m_uCtrPointsNum {0};
+    int m_vCtrPointsNum {0};
+};
+
 #endif // BSPLINE_H
+
+
+//class BsplineSurface
+//{
+//public:
+//    BSpline uSpline;
+//    BSpline vSpline;
+
+//public:
+//    BsplineSurface();
+
+//    void reset(int uDegree, int vDegree, int uCtrPointsNum, int vCtrPointsNum);
+
+//#if USE_QTPOINT
+//    QList<QList<QVector3D>> evaluate(QList<QList<QVector3D>> &ctrpoints,
+//                                   double uInterval=0.01, double vInterval=0.01);
+//#endif
+
+
+//private:
+//    int m_uDegree {0};
+//    int m_vDegree {0};
+//    int m_uCtrPointsNum {0};
+//    int m_vCtrPointsNum {0};
+//};
+
+
+

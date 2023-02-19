@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include "maingraphicsscene.h"
+#include "maincurvescene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CurveWindow; }
@@ -20,7 +20,6 @@ private slots:
     void on_mouseMove(QPointF point);
     void on_selectItem(QPointF point);
 
-
     void on_btnAddPoint_clicked();
 
     void on_btnChangePoint_clicked();
@@ -33,13 +32,15 @@ private slots:
 
     void on_cboCurveType_activated(int index);
 
+    void on_pushButton_clicked();
+
 private:
     Ui::CurveWindow *ui;
     QLabel *labViewCoordinate;
     QLabel *labSceneCoordinate;
     QLabel *labItemCoordinate;
 
-    MainGraphicsScene* scene;
+    MainCurveScene* scene;
 
     QTimer* timer;
 };

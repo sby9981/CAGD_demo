@@ -1,4 +1,4 @@
-#include "maingraphicsscene.h"
+#include "maincurvescene.h"
 #include <QPainter>
 #include <QMouseEvent>
 #include <QDebug>
@@ -6,7 +6,7 @@
 #include <typeinfo>
 #include <QGraphicsView>
 
-MainGraphicsScene::MainGraphicsScene(QWidget *parent)
+MainCurveScene::MainCurveScene(QWidget *parent)
     : QGraphicsScene{parent}
 {
     ctrPolygon = new ControlPolygonItem();
@@ -19,13 +19,13 @@ MainGraphicsScene::MainGraphicsScene(QWidget *parent)
     timer = new QTimer();
     timer->setInterval(30);
     connect(timer, &QTimer::timeout, this,
-            &MainGraphicsScene::drawControlPolgon);
+            &MainCurveScene::drawControlPolgon);
     connect(timer, &QTimer::timeout, this,
-            &MainGraphicsScene::drawBsplineCurve);
+            &MainCurveScene::drawBsplineCurve);
     timer->start();
 }
 
-MyPointItem *MainGraphicsScene::addPoint(QPointF pos)
+MyPointItem *MainCurveScene::addPoint(QPointF pos)
 {
     auto newPoint = new MyPointItem{pos, m_R};
 
@@ -40,7 +40,7 @@ MyPointItem *MainGraphicsScene::addPoint(QPointF pos)
     return newPoint;
 }
 
-void MainGraphicsScene::removeAllPoint()
+void MainCurveScene::removeAllPoint()
 {
     for(auto item : items())
     {
@@ -53,26 +53,26 @@ void MainGraphicsScene::removeAllPoint()
     }
 }
 
-QPointF MainGraphicsScene::pointRectCenter(QPointF boundingRectPos)
+QPointF MainCurveScene::pointRectCenter(QPointF boundingRectPos)
 {
     //接受控制点boundingBox左上角的坐标
     //返回控制点中心坐标
     return boundingRectPos + QPointF(m_R, m_R);
 }
 
-QPointF MainGraphicsScene::pointRectPos(QPointF center)
+QPointF MainCurveScene::pointRectPos(QPointF center)
 {
     //接受控制点中心坐标
     //返回boundingBox左上角的坐标
     return center - QPointF(m_R, m_R);
 }
 
-void MainGraphicsScene::drawControlPolgon()
+void MainCurveScene::drawControlPolgon()
 {
     ctrPolygon->draw(ctrPoints);
 }
 
-void MainGraphicsScene::drawBsplineCurve()
+void MainCurveScene::drawBsplineCurve()
 {
     if(!bsplineCurve->bspline.isDrawEnable(
                 bsplineDegree, ctrPoints.size(), bsplineType))
@@ -107,7 +107,7 @@ void MainGraphicsScene::drawBsplineCurve()
 }
 
 
-QList<QPointF> MainGraphicsScene::generatePoints()
+QList<QPointF> MainCurveScene::generatePoints()
 {
     QList<QPointF> points_list;
     for (auto p : ctrPoints)
@@ -117,7 +117,7 @@ QList<QPointF> MainGraphicsScene::generatePoints()
     return points_list;
 }
 
-void MainGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void MainCurveScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 /*
     鼠标移动，需要考虑：
     实时将鼠标位置传给主窗口显示
@@ -134,7 +134,7 @@ void MainGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseMoveEvent(event);
 }
 
-void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void MainCurveScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 /*
     鼠标点击，需要考虑：
     添加点、选择点、框选的起始位置
@@ -175,7 +175,7 @@ void MainGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
-void MainGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void MainCurveScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 /*
     鼠标松开，需要考虑：
     框选结束，将选择框中的item设为选中，删除选择框
@@ -195,7 +195,7 @@ void MainGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void MainGraphicsScene::keyPressEvent(QKeyEvent *event)
+void MainCurveScene::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Backspace &&
             !selectedItems().isEmpty())

@@ -9,11 +9,11 @@
 #include "myitems.h"
 #include <QList>
 #include <QTimer>
-class MainGraphicsScene : public QGraphicsScene
+class MainCurveScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit MainGraphicsScene(QWidget *parent = nullptr);
+    explicit MainCurveScene(QWidget *parent = nullptr);
 
     MyPointItem* addPoint(QPointF pos);
     void removeAllPoint();
