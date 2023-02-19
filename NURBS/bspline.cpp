@@ -110,51 +110,77 @@ QList<QPointF> BSpline::evaluate(
 }
 #endif
 
-//#if USE_QTPOINT
-//QList<QList<QVector3D>> BsplineSurface::evaluate(
-//        QList<QList<QVector3D>> &ctrpoints, double uInterval, double vInterval)
-///*
-//    INPUT:
-//    ctrpoints:  内层为u向，及固定v，外层为v向
+#if USE_QTPOINT
+vector<vector<QVector3D>> BsplineSurface::evaluate(
+        vector<vector<QVector3D>> &ctrpoints, double uInterval, double vInterval)
+/*
+    INPUT:
+    ctrpoints:  内层为u向，及固定v，外层为v向
 
-//    OUTPUT:
-//    surf:       内层为u向，及固定v取不同U，外层为v向
-//*/
-//{
-
-//    QList<QList<QVector3D>> tempCtrPoints;
-//    for(int i{0}; i < ctrpoints[0].size(); i++)
-//    {
-//        //先做转置，取v向的控制点
-//        QList<QVector3D> vCtps;
-//        for(int j{0}; j < ctrpoints.size(); j++)
-//        {
-//            vCtps.append(QVector3D(ctrpoints[j][i]));
-//        }
-//        //根据控制点，计算v向曲线，作为u向控制点
-//        QList<QVector3D> tempVCtrPolygon = vSpline.evaluate(vCtps, vInterval);
-
-//        //tempCtrPoints内层的每个数组为U向的控制点
-//        tempCtrPoints.append(tempVCtrPolygon);
-//    }
-
-//    QList<QList<QVector3D>> surf;
-//    for(int i=0; i<tempCtrPoints.size(); i++)
-//    {
-//        QList<QVector3D> tempPoints = uSpline.evaluate(tempCtrPoints[i], uInterval);
-//        surf.append(tempCtrPoints);
-//    }
-//    return surf;
-//}
-//#endif
-
-void BsplineSurface::reset(int uDegree, int vDegree, int uCtrPointsNum, int vCtrPointsNum)
+    OUTPUT:
+    surf:       内层为u向，及固定v取不同U，外层为v向
+*/
 {
-    m_uDegree = uDegree;
-    m_uCtrPointsNum = uCtrPointsNum;
-    uSpline.reset(uDegree, uCtrPointsNum);
 
-    m_vDegree = vDegree;
-    m_vCtrPointsNum = vCtrPointsNum;
-    vSpline.reset(vDegree, vCtrPointsNum);
+    vector<vector<QVector3D>> tempCtrPoints;
+    for(int i{0}; i < ctrpoints[0].size(); i++)
+    {
+        BSpline vSpline(m_vDegree, m_vCtrPointsNum);
+
+        //先做转置，取v向的控制点
+        vector<QVector3D> vCtps;
+        for(int j{0}; j < ctrpoints.size(); j++)
+        {
+            vCtps.push_back(QVector3D(ctrpoints[j][i]));
+        }
+
+        //根据控制点，计算v向曲线，作为u向控制点
+        vSpline.setType(m_vType, vCtps);
+        vector<QVector3D> tempVCtrPolygon = vSpline.evaluate(vCtps, vInterval);
+
+        //tempCtrPoints内层的每个数组为U向的控制点
+        tempCtrPoints.push_back(tempVCtrPolygon);
+    }
+
+    vector<vector<QVector3D>> surf;
+    for(int i=0; i<tempCtrPoints.size(); i++)
+    {
+        BSpline uSpline(m_uDegree, m_uCtrPointsNum);
+        uSpline.setType(m_uType, tempCtrPoints[i]);
+        vector<QVector3D> tempPoints = uSpline.evaluate(tempCtrPoints[i], uInterval);
+        surf.push_back(tempPoints);
+    }
+    return surf;
+}
+#endif
+
+
+void BsplineSurface::setUDegree(int newUDegree)
+{
+    m_uDegree = newUDegree;
+}
+
+void BsplineSurface::setVDegree(int newVDegree)
+{
+    m_vDegree = newVDegree;
+}
+
+void BsplineSurface::setUCtrPointsNum(int newUCtrPointsNum)
+{
+    m_uCtrPointsNum = newUCtrPointsNum;
+}
+
+void BsplineSurface::setVCtrPointsNum(int newVCtrPointsNum)
+{
+    m_vCtrPointsNum = newVCtrPointsNum;
+}
+
+void BsplineSurface::setUType(KnotsType newUType)
+{
+    m_uType = newUType;
+}
+
+void BsplineSurface::setVType(KnotsType newVType)
+{
+    m_vType = newVType;
 }

@@ -454,4 +454,34 @@ vector<double> getPolyLength(QList<QPointF> points_list)
     }
     return polylength;
 }
+
+vector<double> getPolyLength(vector<QVector3D> points_list)
+{
+    vector<double> polylength;
+    for(int i=0; i<points_list.size()-1;i++)
+    {
+        QVector3D temp = points_list[i] - points_list[i+1];
+        double dist = sqrt(temp.x()*temp.x()
+                           + temp.y()*temp.y()
+                           + temp.z()*temp.z());
+        polylength.push_back(dist);
+    }
+    return polylength;
+}
+
+vector<double> getPolyLength(vector<QPointF> points_list)
+{
+    vector<double> polylength;
+    for(int i=0; i<points_list.size()-1;i++)
+    {
+        QPointF temp = points_list[i] - points_list[i+1];
+        double dist = sqrt(temp.x()*temp.x()
+                           + temp.y()*temp.y()
+                           );
+        polylength.push_back(dist);
+    }
+    return polylength;
+}
 #endif
+
+

@@ -24,8 +24,9 @@ SurfaceWindow::SurfaceWindow(QWidget *parent) :
     graphSurf = new Q3DSurface;
     container = QWidget::createWindowContainer(graphSurf, ui->centralwidget);
     container->setGeometry(QRect(0, 200, 800, 800));
+    serieCtrPoints = new QSurface3DSeries;
     serieSurf = new QSurface3DSeries;
-    graphSurf->addSeries(serieSurf);
+    graphSurf->addSeries(serieCtrPoints);
 
 }
 
@@ -34,7 +35,7 @@ SurfaceWindow::~SurfaceWindow()
     delete ui;
     delete container;
     delete graphSurf;
-    delete serieSurf;
+    delete serieCtrPoints;
 }
 
 
@@ -56,6 +57,7 @@ void SurfaceWindow::on_pbtReadFile_clicked()
     //    int u_ctrPointsNum = ui->textUctrPointsNum->text().toInt();
     //    int v_ctrPointsNum = ui->textVctrPointsNum->text().toInt();
 
+    //文件第一行为控制点数
     auto info = file.readLine().split(' ');
     int u_ctrPointsNum = info[0].toInt();
     int v_ctrPointsNum = info[1].toInt();
@@ -65,7 +67,7 @@ void SurfaceWindow::on_pbtReadFile_clicked()
     for(int i=0; i< v_ctrPointsNum; i++)
     {
         QSurfaceDataRow *newRow = new QSurfaceDataRow(u_ctrPointsNum);
-
+        vector<QVector3D> tempUCtps;
         for(int j=0; j<u_ctrPointsNum; j++)
         {
             if(file.atEnd())
@@ -79,21 +81,21 @@ void SurfaceWindow::on_pbtReadFile_clicked()
                         numberList[1].toDouble(),
                         numberList[2].toDouble());
             qDebug() << p;
-
+            tempUCtps.push_back(p);
             (*newRow)[j].setPosition(p);
         }
         *dataArray << newRow;
-
+        ctrPoints.push_back(tempUCtps);
         qDebug()<<"";
     }
 
-    serieSurf->dataProxy()->resetArray(dataArray);
+    serieCtrPoints->dataProxy()->resetArray(dataArray);
 }
 
 
 void SurfaceWindow::on_pbtClear_clicked()
 {
     QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-    serieSurf->dataProxy()->resetArray(dataArray);
+    serieCtrPoints->dataProxy()->resetArray(dataArray);
 }
 

@@ -12,6 +12,7 @@ using std::vector;
 #if USE_QTPOINT
 #include <QPointF>
 #include <QList>
+#include <QVector3D>
 #endif
 
 enum KnotsType
@@ -22,35 +23,6 @@ enum KnotsType
     Riesenfeld,
     Hartley_Judd
 };
-
-struct point3
-{
-    double x {0};
-    double y {0};
-    double z {0};
-
-    constexpr explicit point3() {}
-    constexpr explicit point3(double xx, double yy, double zz)
-        :x(xx), y(yy), z(zz)  {}
-
-    void operator=(const point3& other)
-    {x=other.x; y=other.y; z=other.z;}
-
-    friend constexpr inline point3 operator+(const point3 &p1, const point3 &p2)
-    { return point3{p1.x + p2.x, p1.y + p2.y, p1.z + p2.z}; }
-    friend constexpr inline point3 operator-(const point3 &p1, const point3 &p2)
-    { return point3{p1.x - p2.x, p1.y - p2.y, p1.z-p2.z}; }
-    friend constexpr inline point3 operator*(const point3 &p, double c)
-    { return point3{p.x * c, p.y * c, p.z * c}; }
-    friend constexpr inline point3 operator*(double c, const point3 &p)
-    { return point3{p.x * c, p.y * c, p.z * c}; }
-    friend constexpr inline point3 operator+(const point3 &p)
-    { return p; }
-    friend constexpr inline point3 operator-(const point3 &p)
-    { return point3{-p.x, -p.y, -p.z}; }
-
-};
-
 
 
 class KnotsVector
@@ -120,6 +92,8 @@ double getBasisFunVal(double u, double* knots, int i, int k);
 QPointF evaluateDeBoorCoeff(
         double u, QList<QPointF> &ctrPoints, double* knots, int i, int k);
 vector<double> getPolyLength(QList<QPointF> points_list);
+vector<double> getPolyLength(vector<QPointF> points_list);
+vector<double> getPolyLength(vector<QVector3D> points_list);
 #endif
 
 template<typename T>
@@ -175,5 +149,6 @@ T evaluateDeBoorCoeff(double u, vector<T> &ctrPoints, double* knots, int i, int 
     }
     return static_cast<T>(d);
 }
+
 
 #endif // BASIS_H

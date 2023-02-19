@@ -5,7 +5,6 @@
 #include <QDebug>
 #include "bspline.h"
 #include <Q3DSurface>
-#include <Q3DScatter>
 
 namespace Ui {
 class SurfaceWindow;
@@ -30,10 +29,12 @@ private:
     Ui::SurfaceWindow *ui;
 
 
-    QList<QList<QPointF>> ctrPoints;
     QWidget *container;
     Q3DSurface *graphSurf;
+    QSurface3DSeries *serieCtrPoints;
     QSurface3DSeries *serieSurf;
+
+    vector<vector<QVector3D>> ctrPoints;
 
 };
 

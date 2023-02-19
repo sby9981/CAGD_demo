@@ -28,10 +28,35 @@ public:
                             knots.getParamRangeId(u), m_degree
                             );
 
-                curve.pop_back(pu);
+                curve.push_back(pu);
             }
         }
         return curve;
+    }
+
+    template<typename T_point>
+    void setType(KnotsType bsplineType, vector<T_point> &ctrpoints)
+    {
+        vector<double> polylength;
+        switch (bsplineType)
+        {
+        case Uniform:
+            knots.setUnifrom();
+            break;
+        case Quasi_uniform:
+            knots.setQuasiUniform();
+            break;
+        case Riesenfeld:
+            polylength = getPolyLength(ctrpoints);
+            knots.setRiesenfeld(polylength);
+            break;
+        case Hartley_Judd:
+            polylength = getPolyLength(ctrpoints);
+            knots.setHartley_Judd(polylength);
+            break;
+        default:
+            return;
+        }
     }
 
 #if USE_QTPOINT
@@ -50,20 +75,29 @@ private:
 class BsplineSurface
 {
 public:
-    BSpline uSpline;
-    BSpline vSpline;
+
 public:
     BsplineSurface();
 
-    void reset(int uDegree, int vDegree, int uCtrPointsNum, int vCtrPointsNum);
+    void setUDegree(int newUDegree);
+    void setVDegree(int newVDegree);
+    void setUCtrPointsNum(int newUCtrPointsNum);
+    void setVCtrPointsNum(int newVCtrPointsNum);
+    void setUType(KnotsType newUType);
+    void setVType(KnotsType newVType);
 
-
+#if USE_QTPOINT
+    vector<vector<QVector3D>> evaluate(vector<vector<QVector3D>> &ctrpoints,
+                                   double uInterval=0.01, double vInterval=0.01);
+#endif
 
 private:
     int m_uDegree {0};
     int m_vDegree {0};
     int m_uCtrPointsNum {0};
     int m_vCtrPointsNum {0};
+    KnotsType m_uType{NotDefine};
+    KnotsType m_vType{NotDefine};
 };
 
 #endif // BSPLINE_H
