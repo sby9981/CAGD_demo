@@ -16,11 +16,12 @@ SurfaceWindow::SurfaceWindow(QWidget *parent) :
     ui->cboUType->addItem("准均匀B样条", static_cast<KnotsType>(Quasi_uniform));
     ui->cboUType->addItem("非均匀Riesenfeld方法", static_cast<KnotsType>(Riesenfeld));
     ui->cboUType->addItem("非均匀Hartley_Judd方法", static_cast<KnotsType>(Hartley_Judd));
+    ui->cboUType->addItem("Bezier", static_cast<KnotsType>(Bezier));
     ui->cboVType->addItem("无", static_cast<KnotsType>(NotDefine));
     ui->cboVType->addItem("均匀B样条", static_cast<KnotsType>(Uniform));
     ui->cboVType->addItem("准均匀B样条", static_cast<KnotsType>(Quasi_uniform));
     ui->cboVType->addItem("非均匀Riesenfeld方法", static_cast<KnotsType>(Riesenfeld));
-    ui->cboVType->addItem("非均匀Hartley_Judd方法", static_cast<KnotsType>(Hartley_Judd));
+    ui->cboVType->addItem("Bezier", static_cast<KnotsType>(Bezier));
 
     graphSurf = new Q3DSurface;
 //    graphScatter = new Q3DScatter;
@@ -117,6 +118,7 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
 {
     if(ctrPoints.empty())
     {
+        ui->textBrowser->setText("无控制点");
         return;
     }
 
@@ -130,9 +132,27 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
     KnotsType u_type = static_cast<KnotsType>(ui->cboUType->currentIndex());
     KnotsType v_type = static_cast<KnotsType>(ui->cboVType->currentIndex());
 
+    if(u_type==NotDefine || v_type==NotDefine)
+    {
+        ui->textBrowser->setText("请设置曲线类型");
+        return;
+    }
+
     BsplineSurface surf(u_degree, v_degree, u_ctrPointsNum, v_ctrPointsNum);
     surf.setUType(u_type);
     surf.setVType(v_type);
+
+    if(!surf.isU_DrawEnable())
+    {
+        ui->textBrowser->setText("U向次数和控制点数不匹配");
+        return;
+    }
+
+    if(!surf.isV_DrawEnable())
+    {
+        ui->textBrowser->setText("V向次数和控制点数不匹配");
+        return;
+    }
 
     QSurfaceDataArray *dataArray = new QSurfaceDataArray;
     for(double v{0.0}; v<1.0; v+=0.01)
@@ -157,6 +177,6 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
         i=0;
     }
     serieSurf->dataProxy()->resetArray(dataArray);
-
+    ui->textBrowser->setText("");
 }
 

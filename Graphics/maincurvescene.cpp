@@ -74,9 +74,11 @@ void MainCurveScene::drawControlPolgon()
 
 void MainCurveScene::drawBsplineCurve()
 {
+    bsplineCurve->clear();
     if(bsplineType==NotDefine)
     {
         emit textInfo(QString("未定义曲线类型"));
+
         return;
     }
 

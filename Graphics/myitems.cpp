@@ -154,6 +154,12 @@ bool BsplineCurveItem::draw(QList<QPointF>& ctrPoints)
     }
 }
 
+void BsplineCurveItem::clear()
+{
+    m_path.clear();
+    setPath(m_path);
+}
+
 
 void BsplineCurveItem::setDegree(int newDegree)
 {

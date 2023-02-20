@@ -22,7 +22,6 @@ public:
 
 private slots:
 
-
     void on_pbtReadFile_clicked();
 
     void on_pbtClear_clicked();

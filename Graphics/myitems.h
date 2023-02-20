@@ -64,6 +64,7 @@ class BsplineCurveItem : public QGraphicsPathItem
 public:
     explicit BsplineCurveItem(QGraphicsItem *parent = nullptr);
     bool draw(QList<QPointF>& ctrPoints);
+    void clear();
 
     void setDegree(int newDegree);
     void setCtrPointsNum(int newCtrPointsNum);

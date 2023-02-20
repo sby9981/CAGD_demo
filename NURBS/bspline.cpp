@@ -267,3 +267,13 @@ void BsplineSurface::setVType(KnotsType newVType)
 {
     m_vType = newVType;
 }
+
+bool BsplineSurface::isU_DrawEnable()
+{
+    return BSpline::isDrawEnable(m_uDegree, m_uCtrPointsNum, m_uType);
+}
+
+bool BsplineSurface::isV_DrawEnable()
+{
+    return BSpline::isDrawEnable(m_vDegree, m_vCtrPointsNum, m_vType);
+}

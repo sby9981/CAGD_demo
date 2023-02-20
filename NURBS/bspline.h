@@ -91,6 +91,9 @@ public:
     void setUType(KnotsType newUType);
     void setVType(KnotsType newVType);
 
+    bool isU_DrawEnable();
+    bool isV_DrawEnable();
+
 #if USE_QTPOINT
     bool calSurfPos(vector<vector<QVector3D>> &ctrpoints, QVector3D &puv,double u, double v);
     vector<vector<QVector3D>> evaluate(vector<vector<QVector3D>> &ctrpoints,
