@@ -137,6 +137,17 @@ void KnotsVector::setHartley_Judd(vector<double> &polylength)
     }
 }
 
+bool KnotsVector::setBezier()
+{
+    m_type = Bezier;
+    if(m_ctrPointsNum == m_degree+1)
+    {
+        m_setEdgeRepeatKnot();
+        return true;
+    }
+    return false;
+}
+
 int KnotsVector::degree() const
 {
     return m_degree;

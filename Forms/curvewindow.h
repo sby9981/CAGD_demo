@@ -33,6 +33,7 @@ private slots:
     void on_cboCurveType_activated(int index);
 
     void on_pushButton_clicked();
+    void on_textInfo(QString info);
 
 private:
     Ui::CurveWindow *ui;

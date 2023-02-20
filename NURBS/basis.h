@@ -21,7 +21,8 @@ enum KnotsType
     Uniform,
     Quasi_uniform,
     Riesenfeld,
-    Hartley_Judd
+    Hartley_Judd,
+    Bezier
 };
 
 
@@ -51,6 +52,7 @@ public:
     void setQuasiUniform();
     void setRiesenfeld(vector<double>& polylength);
     void setHartley_Judd(vector<double>& polylength);
+    bool setBezier();
 
 
     int degree() const;

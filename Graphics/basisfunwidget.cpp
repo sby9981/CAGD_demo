@@ -99,12 +99,42 @@ void BasisFunWidget::drawBasisFunCurve(QPainter *painter)
 void BasisFunWidget::drawKnots(QPainter *painter)
 {
     double half_height {10.0};
+    struct counter{
+        double knot{-1};
+        int num{0};
+        void reset(double newKnot)
+        {
+            knot = newKnot;
+            num = 1;
+        }
+    }count;
+
     for(auto knot : basisFun.knots.vec())
     {
-        double x {transformX(knot)};
-        painter->drawLine(QPointF(x, zero_y-half_height),
-                          QPointF(x, zero_y+half_height));
-        painter->drawText(x, zero_y + 2*half_height,
-                          QString::number(knot));
+        if(knot - count.knot < MIN_POSITIVE_NUM)
+        {
+            count.num++;
+        }
+        else
+        {
+            if(count.num > 0)
+            {
+                double x {transformX(count.knot)};
+                painter->drawLine(QPointF(x, zero_y-half_height),
+                                  QPointF(x, zero_y+half_height));
+                painter->drawText(x, zero_y + 2*half_height,
+                                  QString::number(count.knot));
+                painter->drawText(x, zero_y + 4*half_height,
+                                  QString::number(count.num));
+            }
+            count.reset(knot);
+        }
     }
+    double x {transformX(count.knot)};
+    painter->drawLine(QPointF(x, zero_y-half_height),
+                      QPointF(x, zero_y+half_height));
+    painter->drawText(x, zero_y + 2*half_height,
+                      QString::number(count.knot));
+    painter->drawText(x, zero_y + 4*half_height,
+                      QString::number(count.num));
 }

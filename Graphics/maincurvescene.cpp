@@ -74,9 +74,16 @@ void MainCurveScene::drawControlPolgon()
 
 void MainCurveScene::drawBsplineCurve()
 {
+    if(bsplineType==NotDefine)
+    {
+        emit textInfo(QString("未定义曲线类型"));
+        return;
+    }
+
     if(!bsplineCurve->bspline.isDrawEnable(
                 bsplineDegree, ctrPoints.size(), bsplineType))
     {
+        emit textInfo(QString("错误，次数与控制点数不匹配！"));
         return;
     }
 
@@ -98,9 +105,14 @@ void MainCurveScene::drawBsplineCurve()
         polylength = getPolyLength(points_list);
         bsplineCurve->bspline.knots.setHartley_Judd(polylength);
         break;
+    case Bezier:
+        bsplineCurve->bspline.knots.setBezier();
+        break;
     default:
+        emit textInfo(QString("未定义曲线类型"));
         return;
     }
+    emit textInfo(QString(" "));
     //将knots传递给basisfun窗口
     emit defineKnotsVec(bsplineCurve->bspline.knots);
     bsplineCurve->draw(points_list);

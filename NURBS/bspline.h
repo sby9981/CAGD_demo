@@ -54,6 +54,9 @@ public:
             polylength = getPolyLength(ctrpoints);
             knots.setHartley_Judd(polylength);
             break;
+        case Bezier:
+            knots.setBezier();
+            break;
         default:
             return;
         }
@@ -78,6 +81,8 @@ public:
 
 public:
     BsplineSurface();
+    explicit BsplineSurface(int uDegree, int vDegree,
+                            int uCtrPointsNum, int vCtrPointsNum);
 
     void setUDegree(int newUDegree);
     void setVDegree(int newVDegree);
@@ -87,8 +92,9 @@ public:
     void setVType(KnotsType newVType);
 
 #if USE_QTPOINT
+    bool calSurfPos(vector<vector<QVector3D>> &ctrpoints, QVector3D &puv,double u, double v);
     vector<vector<QVector3D>> evaluate(vector<vector<QVector3D>> &ctrpoints,
-                                   double uInterval=0.01, double vInterval=0.01);
+                                       double uInterval=0.01, double vInterval=0.01);
 #endif
 
 private:

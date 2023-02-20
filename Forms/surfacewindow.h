@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QDebug>
-#include "bspline.h"
 #include <Q3DSurface>
+#include <Q3DScatter>
+#include <vector>
+using std::vector;
 
 namespace Ui {
 class SurfaceWindow;
@@ -25,15 +27,18 @@ private slots:
 
     void on_pbtClear_clicked();
 
+    void on_pbtDrawSurf_clicked();
+
 private:
     Ui::SurfaceWindow *ui;
 
 
     QWidget *container;
     Q3DSurface *graphSurf;
-    QSurface3DSeries *serieCtrPoints;
     QSurface3DSeries *serieSurf;
 
+//    Q3DScatter *graphScatter;
+//    QScatter3DSeries *seriesScatter;
     vector<vector<QVector3D>> ctrPoints;
 
 };

@@ -43,7 +43,7 @@ signals:
     void mouseMove(QPointF event);
     void selectItemScenePos(QPointF pos);
     void defineKnotsVec(KnotsVector& knots);
-
+    void textInfo(QString info);
 private:
     //用于框选
     SelectRectItem* m_selectRectItem {NULL};

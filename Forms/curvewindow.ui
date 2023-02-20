@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1312</width>
-    <height>982</height>
+    <height>1004</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -211,7 +211,7 @@
       <x>20</x>
       <y>730</y>
       <width>1000</width>
-      <height>200</height>
+      <height>220</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -223,13 +223,13 @@
     <property name="minimumSize">
      <size>
       <width>1000</width>
-      <height>200</height>
+      <height>220</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
       <width>1000</width>
-      <height>200</height>
+      <height>220</height>
      </size>
     </property>
     <property name="styleSheet">
@@ -247,6 +247,16 @@
     </property>
     <property name="text">
      <string>曲面绘制</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>1040</x>
+      <y>730</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
     </property>
    </widget>
   </widget>
