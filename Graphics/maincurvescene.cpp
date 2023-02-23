@@ -117,7 +117,14 @@ void MainCurveScene::drawBsplineCurve()
     emit textInfo(QString(" "));
     //将knots传递给basisfun窗口
     emit defineKnotsVec(bsplineCurve->bspline.knots);
-    bsplineCurve->draw(points_list);
+
+    if(curveInterval > 0.1 || curveInterval<0)
+    {
+        emit textInfo(QString("曲线插值间隔需在0~0.1之间"));
+        bsplineCurve->draw(points_list);
+        return;
+    }
+    bsplineCurve->draw(points_list, curveInterval);
 }
 
 
@@ -223,5 +230,4 @@ void MainCurveScene::keyPressEvent(QKeyEvent *event)
         bsplineCurve->setCtrPointsNum(ctrPoints.size());
     }
 }
-
 

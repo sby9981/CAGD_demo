@@ -29,6 +29,7 @@ public:
 public:
     bool addPointEnable {true};
     int bsplineDegree {0};
+    double curveInterval {0.01};
     KnotsType bsplineType {NotDefine};
     QList<MyPointItem*> ctrPoints;
     ControlPolygonItem* ctrPolygon;

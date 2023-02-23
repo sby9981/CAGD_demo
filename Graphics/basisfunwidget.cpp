@@ -2,7 +2,7 @@
 #include <QPainterPath>
 #include <numeric>
 
-constexpr double interval {0.01};
+constexpr double interval {0.001};
 
 BasisFunWidget::BasisFunWidget(QWidget *parent)
     : QWidget{parent}

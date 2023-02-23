@@ -133,7 +133,7 @@ BsplineCurveItem::BsplineCurveItem(QGraphicsItem *parent)
     setPen(pen);
 }
 
-bool BsplineCurveItem::draw(QList<QPointF>& ctrPoints)
+bool BsplineCurveItem::draw(QList<QPointF>& ctrPoints, double curveInterval)
 {
     //绘制样条曲线
     if(!bspline.isDrawEnable())
@@ -142,7 +142,7 @@ bool BsplineCurveItem::draw(QList<QPointF>& ctrPoints)
     }
     else
     {
-        QList<QPointF> points = bspline.evaluate(ctrPoints, 0.01);
+        QList<QPointF> points = bspline.evaluate(ctrPoints, curveInterval);
         m_path.clear();
         m_path.moveTo(points[0]);
         for(int i=1; i<points.size(); i++)

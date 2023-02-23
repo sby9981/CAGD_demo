@@ -21,6 +21,7 @@ SurfaceWindow::SurfaceWindow(QWidget *parent) :
     ui->cboVType->addItem("均匀B样条", static_cast<KnotsType>(Uniform));
     ui->cboVType->addItem("准均匀B样条", static_cast<KnotsType>(Quasi_uniform));
     ui->cboVType->addItem("非均匀Riesenfeld方法", static_cast<KnotsType>(Riesenfeld));
+    ui->cboVType->addItem("非均匀Hartley_Judd方法", static_cast<KnotsType>(Hartley_Judd));
     ui->cboVType->addItem("Bezier", static_cast<KnotsType>(Bezier));
 
     graphSurf = new Q3DSurface;
@@ -147,7 +148,6 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
         ui->textBrowser->setText("U向次数和控制点数不匹配");
         return;
     }
-
     if(!surf.isV_DrawEnable())
     {
         ui->textBrowser->setText("V向次数和控制点数不匹配");

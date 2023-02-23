@@ -35,6 +35,8 @@ private slots:
     void on_pushButton_clicked();
     void on_textInfo(QString info);
 
+    void on_textCurveInterval_returnPressed();
+
 private:
     Ui::CurveWindow *ui;
     QLabel *labViewCoordinate;

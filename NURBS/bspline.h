@@ -21,7 +21,7 @@ public:
         vector<T_point> curve;
         for(double u = 0; u < 1.0; u += interval)
         {
-            if(knots.isInDomain(u))
+            if(knots.isInDomain(u)) //判断u是否在定义域内
             {
                 T_point pu = evaluateDeBoorCoeff<T_point>(
                             u, ctrpoints, knots.data(),

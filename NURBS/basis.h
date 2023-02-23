@@ -54,7 +54,6 @@ public:
     void setHartley_Judd(vector<double>& polylength);
     bool setBezier();
 
-
     int degree() const;
 
     int ctrPointsNum() const;

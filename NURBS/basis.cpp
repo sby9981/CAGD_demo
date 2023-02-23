@@ -70,7 +70,7 @@ void KnotsVector::setRiesenfeld(vector<double>& polylength)
     double totalLength = std::accumulate(
                 polylength.begin(), polylength.end(), 0.0);
 
-    m_setEdgeRepeatKnot();
+    m_setEdgeRepeatKnot(); //设置首尾的重节点
 
     if(m_degree % 2 == 0)
     {

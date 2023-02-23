@@ -33,6 +33,8 @@ CurveWindow::CurveWindow(QWidget *parent)
     ui->cboCurveType->addItem("非均匀Hartley_Judd方法", static_cast<KnotsType>(Hartley_Judd));
     ui->cboCurveType->addItem("Bezier曲线", static_cast<KnotsType>(Bezier));
 
+    ui->textCurveInterval->setText("0.01");
+
     //Graphics setting
     ui->mainView->setCursor(Qt::CrossCursor);
     ui->mainView->setMouseTracking(true);
@@ -108,9 +110,14 @@ void CurveWindow::on_btnDefineEdit_clicked()
             !ui->editPosX->text().isEmpty() &&
             !ui->editPosY->text().isEmpty())
     {
+        bool isNum1, isNum2;
         QGraphicsItem* item = scene->selectedItems()[0];
-        qreal center_x = ui->editPosX->text().toDouble();
-        qreal center_y = ui->editPosY->text().toDouble();
+        qreal center_x = ui->editPosX->text().toDouble(&isNum1);
+        qreal center_y = ui->editPosY->text().toDouble(&isNum2);
+        if(!isNum1 || !isNum2)
+        {
+            return;
+        }
         QPointF newBoundBoxScenePos =
                 scene->pointRectPos(QPointF(center_x, center_y));
         //item的位置是以创立位置为远点的局部坐标系
@@ -153,5 +160,14 @@ void CurveWindow::on_pushButton_clicked()
 void CurveWindow::on_textInfo(QString info)
 {
     ui->textBrowser->setText(info);
+}
+
+
+void CurveWindow::on_textCurveInterval_returnPressed()
+{
+    bool isNum;
+    double interval = ui->textCurveInterval->text().toDouble(&isNum);
+    if(isNum)
+        scene->curveInterval = interval;
 }
 
