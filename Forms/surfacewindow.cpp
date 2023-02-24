@@ -164,7 +164,7 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
             QVector3D puv;
             if(surf.calSurfPos(ctrPoints, puv, u, v))
             {
-//                qDebug() << puv;
+                qDebug() << puv;
                 *newRow<<puv;
                 i++;
             }
@@ -172,7 +172,7 @@ void SurfaceWindow::on_pbtDrawSurf_clicked()
         if(i>1)
         {
             *dataArray << newRow;
-//            qDebug()<<"";
+            qDebug()<<"";
         }
         i=0;
     }

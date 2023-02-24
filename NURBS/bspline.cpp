@@ -197,12 +197,18 @@ bool BsplineSurface::calSurfPos(vector<vector<QVector3D>>
         }
     }
 
-    BSpline vSpline(m_vDegree, u_constant.size());
-    vSpline.setType(m_vType, u_constant);
-    if(u_constant.empty() || !vSpline.knots.isInDomain(v))
+    if(u_constant.empty())
     {
         return false;
     }
+
+    BSpline vSpline(m_vDegree, u_constant.size());
+    vSpline.setType(m_vType, u_constant);
+    if(!vSpline.knots.isInDomain(v))
+    {
+        return false;
+    }
+
     puv = evaluateDeBoorCoeff<QVector3D>(
                 v, u_constant, vSpline.knots.data(),
                 vSpline.knots.getParamRangeId(v), m_vDegree
